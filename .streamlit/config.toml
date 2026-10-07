@@ -1,0 +1,8 @@
+# Streamlit 主题：参考 IBM Carbon 设计系统的企业级浅色方案
+# 主色 #0f62fe（Carbon Blue 60），正文 #161616（Gray 100），次级底 #f4f4f4（Gray 10）
+[theme]
+base = "light"
+primaryColor = "#0f62fe"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f4f4f4"
+textColor = "#161616"
