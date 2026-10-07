@@ -30,6 +30,11 @@ GEN_TIMEOUT = 150   # 生成可以慢：本地小模型约 9 字/秒，给足时
 
 _THINK_RE = re.compile(r"<think>[\s\S]*?</think>")
 
+# LM Studio 永远在本机回环地址上，绝不该走系统代理——
+# 用户开代理软件时，trust_env=False 防止回环请求被劫持
+_LOCAL_SESSION = requests.Session()
+_LOCAL_SESSION.trust_env = False
+
 
 @dataclass
 class AdvisorResult:
@@ -119,7 +124,7 @@ def stream_llm_advice(rep: MatchReport, jd_text: str, resume_text: str,
     """
     # 第 1 层：探活。3 秒内不响应就当离线。GET /v1/models 不碰模型，毫秒级。
     try:
-        probe = requests.get(f"{api_base}/v1/models", timeout=PROBE_TIMEOUT)
+        probe = _LOCAL_SESSION.get(f"{api_base}/v1/models", timeout=PROBE_TIMEOUT)
         probe.raise_for_status()
         model_id = _pick_model(probe.json().get("data") or [])
     except (requests.RequestException, ValueError):
@@ -130,7 +135,7 @@ def stream_llm_advice(rep: MatchReport, jd_text: str, resume_text: str,
     think_n = 0
     next_report = 0
     try:
-        with requests.post(
+        with _LOCAL_SESSION.post(
             f"{api_base}/v1/chat/completions",
             json={
                 "model": model_id,
