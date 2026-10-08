@@ -168,8 +168,8 @@ def stream_llm_advice(rep: MatchReport, jd_text: str, resume_text: str,
                     if raw_content == c:          # 第一片正文到达
                         on_status("✍️ 正文生成中……")
                     on_delta(_strip_think(raw_content))
-    except (requests.RequestException, KeyError, IndexError, ValueError):
-        return AdvisorResult("fallback", "降级模式：LLM 调用出错，词频建议仍有效", "")
+    except (requests.RequestException, KeyError, IndexError, ValueError) as e:
+        return AdvisorResult("fallback", f"降级模式：LLM 调用出错（{e.__class__.__name__}），词频建议仍有效", "")
 
     cleaned = _strip_think(raw_content).strip()
     if cleaned:

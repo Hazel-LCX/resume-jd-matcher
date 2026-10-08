@@ -117,6 +117,7 @@ def test_stream_parses_sse_from_fake_server():
         assert any("正文" in s for s in statuses)   # 进入正文阶段有状态回报
     finally:
         server.shutdown()
+        server.server_close()
 
 
 if __name__ == "__main__":
