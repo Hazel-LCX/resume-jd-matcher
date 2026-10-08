@@ -1,5 +1,7 @@
 # 匹配引擎 matcher.py 只用 Python 标准库，零第三方依赖
-# 界面层
+# 网页界面（v1，功能冻结）
 streamlit>=1.58
-# 模块 3：调用本地 LM Studio 的 OpenAI 兼容接口
+# 桌面界面（v2 主线）
+customtkinter>=6.0
+# LLM 调用（本地 LM Studio / 云端 OpenAI 兼容 API 通用）
 requests>=2.34
